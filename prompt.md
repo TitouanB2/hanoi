@@ -221,27 +221,6 @@ Capture du jeux à cette état
 
 # Exercice 7 Recommencer à zéro : un prompt unique
 
-Résultat de chatgpt version gratuite ![alt text](image-1.png)
-
-J'ai reformulé 1 fois chatgpt car il n'a pas fait les animations des anneaux la première fois alors que la consigne avait été fournis dans le prompt  
-
-Résultat de claude version gratuite ![alt text](image-2.png)
-
-Claude n'a pas eu besoins de reformulation
-
-
-## A. Quelles parties du prompt ont eu le plus d’effet ? Retirer une contrainte (par exemple l’architecture imposée) et relancer : que change-t-il ?
-
-La partie du prompt qui à eu le plus d'effet ce retrouve dans l'architecture à respecter, chaque LLM a bien respecté l'architecture  ainsi que le nom des fonction et des classe dans le code. Lorsque j'ai retirer d'architecture chatgpt m'a fait le même résultat mais rassembler dans 1 seul fichier html tandit que claude à m'a crée plusieurs fichier différents pour séparer les différents morceaux de code js. Les principaux changement se font côté IHM, les choix de couleur et l'affichage des informations sont différents
-
-## B. Le code obtenu en un prompt est-il meilleur ou moins bon que celui construit en six exercices ? Sur quels critères ?
-
-Le code généré à partir d’un seul prompt me semble meilleur sur le plan de la présentation. En construisant le jeu en six étapes, les éléments d’interface ont été ajoutés progressivement, sans réorganisation globale. Comme le montre l’image ci-dessous, les différents textes apparaissent les uns à la suite des autres, dans l’ordre où les fonctionnalités ont été ajoutées : ![Interface du jeu construit en six exercices](image-3.png)
-
-Avec un prompt unique, le LLM peut prendre en compte l’ensemble des fonctionnalités et des contraintes dès le départ. Le résultat offre ici une présentation plus cohérente et agréable à utiliser, comme le montre cette image : ![Interface du jeu généré avec un prompt unique](image-4.png)
-
-Cette comparaison porte principalement sur la qualité visuelle et l’organisation de l’interface. Cependant du points de vu du code que ce soit pour chatgpt ou claude les 2 LLM on produit beaucoup plus de code dans script.js, on resent donc que avec les 6 exercice le code est plus court et va directement aux besoins essentielle alors que en 1 prompt les LLM rajoute du code pas explicitement demandé.
-
 ## Tableau comparatif des LLM
 
 | Critère | Claude (version gratuite) | ChatGPT (version gratuite) |
@@ -249,6 +228,64 @@ Cette comparaison porte principalement sur la qualité visuelle et l’organisat
 | Fonctionnalités correctes au premier prompt | Toutes les fonctionnalités demandées ont été réalisées correctement dès le premier prompt. | Toutes les fonctionnalités ont été réalisées, sauf les animations des anneaux, qui étaient absentes au premier résultat. Elles ont été ajoutées après une reformulation. |
 | Nombre de reformulations | 0 | 1 |
 | Taille du code | `script.js` : 586 lignes ; `index.html` : 55 lignes ; `style.css` : 321 lignes. **Total : 962 lignes.** | `script.js` : 1 409 lignes ; `index.html` : 143 lignes ; `style.css` : 727 lignes. **Total : 2 279 lignes.** Environ la moitié de `script.js` concerne les animations des anneaux. |
-| Respect des contraintes | Toutes les contraintes ont été respectées dès le premier prompt. | Les contraintes ont été respectées après la reformulation portant sur les animations. |
+| Respect des contraintes | Toutes les contraintes ont été respectées dès le premier prompt. | Les contraintes ont été respectées dès le premier prompt sans compté la reformulation portant sur les animations. |
 | Lisibilité et organisation | Les fonctionnalités de JavaScript sont séparées et expliquées par des commentaires. Les règles CSS ne sont toutefois pas séparées par des commentaires, ce qui rend certaines parties du fichier `style.css` moins faciles à retrouver. | Les fonctionnalités et les fonctions JavaScript sont commentées. Les différentes parties du fichier `style.css` sont également séparées par des commentaires, ce qui facilite leur repérage. |
 | Interface utilisateur | L’interface est moins agréable visuellement que celle de ChatGPT, selon mon appréciation. | L’interface me paraît plus agréable. Cette différence se reflète aussi dans la taille plus importante de `index.html` et de `style.css`. |
+
+
+Résultat de chatgpt version gratuite ![alt text](image-1.png)
+
+Résultat de claude version gratuite ![alt text](image-2.png)
+
+
+## A. Quelles parties du prompt ont eu le plus d’effet ? Retirer une contrainte (par exemple l’architecture imposée) et relancer : que change-t-il ?
+
+La partie du prompt qui à eu le plus d'effet ce retrouve dans l'architecture à respecter, chaque LLM a bien respecté l'architecture  ainsi que le nom des fonction et des classe dans le code. Lorsque j'ai retirer l'architecture chatgpt m'a fait le même résultat mais a rassemblé dans 1 seul fichier html toutes les fonctionnalité tandit que claude à m'a crée plusieurs fichier différents pour séparer les différents morceaux de code .js Les principaux changement se font côté IHM, les choix de couleur et l'affichage des informations sont différents.
+
+## B. Le code obtenu en un prompt est-il meilleur ou moins bon que celui construit en six exercices ? Sur quels critères ?
+
+Le code généré à partir d’un seul prompt me semble meilleur sur le plan de la présentation. En construisant le jeu en six étapes, les éléments d’interface ont été ajoutés progressivement, sans réorganisation globale. Comme le montre l’image ci-dessous, les différents textes apparaissent les uns à la suite des autres, dans l’ordre où les fonctionnalités ont été ajoutées : ![Interface du jeu construit en six exercices](image-3.png)
+
+Avec un prompt unique, le LLM peut prendre en compte l’ensemble des fonctionnalités et des contraintes dès le départ. Le résultat offre ici une présentation plus cohérente et agréable à utiliser, comme le montre cette image : ![Interface du jeu généré avec un prompt unique](image-4.png)
+
+Cette comparaison porte principalement sur la qualité visuelle et l’organisation de l’interface. Cependant du points de vu du code que ce soit pour chatgpt ou claude les 2 LLM on produit beaucoup plus de code dans script.js, on resent donc que avec les 6 exercice le code est plus court et va directement aux besoins essentielle alors que en 1 prompt les LLM rajoute du code pas explicitement demandé comme la qualité visuelle différente entre les 2 LLM.
+
+# Exercice 8 Documentation automatique (optionnel)
+
+## Prompt 8 — Documentation JSDoc
+
+- **Exercice :** Ajouter une en-tête JSDoc à chaque fonction de `script.js`, avec une description, les paramètres typés et la valeur de retour.
+- **LLM utilisé :** Copilot gpt-6-luna.
+- **Texte du prompt :**
+
+  > enfin pour cette 8ème étape dans le context d'un développeur back-end rajoute une entête pour chaque fonction dans script.js les commentaire devront utilisé le format JSDoc et pour chaque fonction le format attendu doit ressemblé à celui fournis dans cette exemple /**
+  > * Calcule la liste des coups qui déplace n anneaux d’une tour à une autre.
+  > * @param {number} n Nombre d’anneaux à déplacer.
+  > * @param {number} de Tour de départ (0, 1 ou 2).
+  > * @param {number} vers Tour d’arrivée.
+  > * @param {number} via Tour intermédiaire.
+  > * @returns {number[][]} Liste de couples [de, vers], dans l’ordre d’exécution.
+  > */
+  > function resoudre(n, de, vers, via)
+
+- **Résultat :** Après reformulation, les fonctions principales de `script.js` ont une en-tête JSDoc avec description, paramètres et valeur de retour.
+- **Bug observé :** Aucun constaté lors de la vérification syntaxique.
+- **Nombre de reformulations nécessaires :** 1.
+- **Texte de la première reformulation :**
+
+  > ne produit pas d'entête pour les fontions utilisé au sein d'une fonction
+
+
+## A. Relire chaque docstring en regard du code : en trouver au moins une inexacte, vague ou incomplète (paramètre oublié, valeur de retour fausse, effet de bord non mentionné) et la corriger, à la main ou par un prompt ciblé.
+
+Réponse générer par un prompt au LLM
+
+En relisant les docstrings de `script.js`, j’ai repéré celle de `attendreDelai(ms, signal)`. Elle indiquait seulement que la promesse était résolue à la fin du délai, sans préciser qu’elle pouvait aussi être rejetée lorsque le signal d’annulation est déclenché. La description était donc incomplète, car l’annulation fait partie du comportement prévu par cette fonction.
+
+J’ai corrigé la docstring pour indiquer les deux issues : la promesse est résolue lorsque le délai de `ms` millisecondes expire, ou rejetée avec une erreur `AbortError` si `signal` est annulé avant. J’ai également précisé les docstrings des autres fonctions retournant une promesse : `attendreAnimation` mentionne le rejet en cas d’annulation de l’animation, et `rejouerCoups` distingue la fin normale du rejeu, l’arrêt entre deux coups et les erreurs pendant une attente ou un déplacement illégal.
+
+La syntaxe de `script.js` a été vérifiée avec `node --check` après ces corrections : aucune erreur n’a été signalée.
+
+
+## B. Demander ensuite au LLM une page tests.html qui charge script.js puis un fichier tests.js vérifiant dans la console resoudre (nombre de coups, validité de chaque coup, position finale) et deplacementValide. Un test échoue-t-il ? Qui a tort, le test ou le code ?
+

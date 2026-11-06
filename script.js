@@ -39,6 +39,11 @@ let anneauxRendus = new WeakMap();
 const delaiDemo = 300;
 const cleTheme = "hanoi-theme";
 
+/**
+ * Applique le thème choisi et met à jour le libellé accessible du bouton.
+ * @param {"light" | "dark"} theme Thème à appliquer.
+ * @returns {void}
+ */
 function appliquerTheme(theme) {
   document.documentElement.dataset.theme = theme;
   const themeSuivant = theme === "dark" ? "light" : "dark";
@@ -52,16 +57,30 @@ function appliquerTheme(theme) {
 const themeEnregistre = localStorage.getItem(cleTheme);
 appliquerTheme(themeEnregistre === "dark" ? "dark" : "light");
 
-boutonTheme.addEventListener("click", () => {
+/**
+ * Bascule le thème et mémorise le choix dans le stockage local.
+ * @returns {void}
+ */
+function basculerTheme() {
   const nouveauTheme = document.documentElement.dataset.theme === "dark" ? "light" : "dark";
   localStorage.setItem(cleTheme, nouveauTheme);
   appliquerTheme(nouveauTheme);
-});
+}
 
+boutonTheme.addEventListener("click", basculerTheme);
+
+/**
+ * Affiche dans la page le nombre de coups joués.
+ * @returns {void}
+ */
 function mettreAJourCompteur() {
   affichageNbCoups.textContent = String(nombreCoups);
 }
 
+/**
+ * Vérifie si tous les anneaux sont empilés dans le bon ordre sur la troisième tour.
+ * @returns {boolean} Vrai si la partie est gagnée.
+ */
 function partieGagnee() {
   const nombreAnneaux = etat.reduce((total, pile) => total + pile.length, 0);
   const pileDestination = etat[2];
@@ -73,6 +92,10 @@ function partieGagnee() {
   );
 }
 
+/**
+ * Affiche les félicitations et le score lorsque la partie est gagnée.
+ * @returns {void}
+ */
 function verifierVictoire() {
   if (partieGagnee()) {
     const nombreAnneaux = etat[2].length;
@@ -89,6 +112,10 @@ function verifierVictoire() {
   }
 }
 
+/**
+ * Récupère le plateau ou le recrée si le DOM ne contient pas un élément valide.
+ * @returns {HTMLDivElement} Élément du plateau prêt à recevoir les tours.
+ */
 function obtenirPlateau() {
   let plateau = document.getElementById("plateau");
 
@@ -110,6 +137,11 @@ function obtenirPlateau() {
   return plateau;
 }
 
+/**
+ * Récupère les trois tours du plateau ou les recrée si sa structure est incorrecte.
+ * @param {HTMLDivElement} plateau Élément contenant les tours.
+ * @returns {HTMLDivElement[]} Les trois éléments représentant les tours.
+ */
 function obtenirTours(plateau) {
   const toursExistantes = Array.from(plateau.children);
   const structureValide =
@@ -126,6 +158,10 @@ function obtenirTours(plateau) {
   return noeudsTours;
 }
 
+/**
+ * Reconstruit l’affichage du plateau à partir de l’état JavaScript.
+ * @returns {void}
+ */
 function rendre() {
   const plateau = obtenirPlateau();
   const tours = obtenirTours(plateau);
@@ -133,50 +169,56 @@ function rendre() {
   anneauxRendus = new WeakMap();
 
   tours.forEach((tour, indexTour) => {
-    tour.className = "tour";
-    tour.setAttribute("aria-label", `Tour ${indexTour + 1}`);
-    indicesTours.set(tour, indexTour);
+       tour.className = "tour";
+       tour.setAttribute("aria-label", `Tour ${indexTour + 1}`);
+       indicesTours.set(tour, indexTour);
 
-    const anneaux = etat[indexTour].map((taille, indexAnneau) => {
-      let anneau = noeudsAnneaux.get(taille);
+       const anneaux = etat[indexTour].map((taille, indexAnneau) => {
+           let anneau = noeudsAnneaux.get(taille);
 
-      if (!anneau) {
-        anneau = document.createElement("div");
-        noeudsAnneaux.set(taille, anneau);
-      }
+           if (!anneau) {
+             anneau = document.createElement("div");
+             noeudsAnneaux.set(taille, anneau);
+           }
 
-      const estSommet = indexAnneau === etat[indexTour].length - 1;
-      anneau.className = "anneau";
-      anneau.setAttribute("aria-label", `Anneau de taille ${taille}`);
-      anneau.style.width = `${28 + taille * 8}%`;
-      anneau.style.backgroundColor = `hsl(${210 + taille * 12} 65% 52%)`;
+           const estSommet = indexAnneau === etat[indexTour].length - 1;
+           anneau.className = "anneau";
+           anneau.setAttribute("aria-label", `Anneau de taille ${taille}`);
+           anneau.style.width = `${28 + taille * 8}%`;
+           anneau.style.backgroundColor = `hsl(${210 + taille * 12} 65% 52%)`;
 
-      if (estSommet) {
-        anneau.classList.add("selectionnable");
+           if (estSommet) {
+             anneau.classList.add("selectionnable");
 
-        if (tourSelectionnee === indexTour) {
-          anneau.classList.add("selectionne");
-        }
-      }
+             if (tourSelectionnee === indexTour) {
+               anneau.classList.add("selectionne");
+             }
+           }
 
-      anneauxRendus.set(anneau, { indexTour, taille });
-      return anneau;
-    });
+           anneauxRendus.set(anneau, { indexTour, taille });
+           return anneau;
+       });
 
     const contenuInchange =
-      tour.children.length === anneaux.length &&
-      anneaux.every((anneau, index) => tour.children[index] === anneau);
+       tour.children.length === anneaux.length &&
+       anneaux.every((anneau, index) => tour.children[index] === anneau);
 
-    if (!contenuInchange) {
-      tour.replaceChildren(...anneaux);
-    }
+      if (!contenuInchange) {
+        tour.replaceChildren(...anneaux);
+      }
 
-    if (tourInvalide === indexTour) {
-      tour.classList.add("coup-invalide");
-    }
+      if (tourInvalide === indexTour) {
+        tour.classList.add("coup-invalide");
+      }
   });
 }
 
+/**
+ * Vérifie si le sommet d’une tour peut être déposé sur une autre tour.
+ * @param {number} de Indice de la tour de départ.
+ * @param {number} vers Indice de la tour d’arrivée.
+ * @returns {boolean} Vrai si le déplacement respecte les règles du jeu.
+ */
 function deplacementValide(de, vers) {
   if (
     !Number.isInteger(de) ||
@@ -206,6 +248,15 @@ function deplacementValide(de, vers) {
   return pileDepart[pileDepart.length - 1] < pileArrivee[pileArrivee.length - 1];
 }
 
+/**
+ * Calcule récursivement la liste minimale des coups pour déplacer les anneaux.
+ * @param {number} n Nombre d’anneaux à déplacer.
+ * @param {number} de Indice de la tour de départ.
+ * @param {number} vers Indice de la tour d’arrivée.
+ * @param {number} via Indice de la tour intermédiaire.
+ * @returns {number[][]} Liste ordonnée de couples [de, vers].
+ * @throws {RangeError} Si le nombre d’anneaux ou les indices des tours sont invalides.
+ */
 function resoudre(n, de, vers, via) {
   if (!Number.isInteger(n) || n < 0) {
     throw new RangeError("Le nombre d’anneaux à résoudre doit être un entier positif ou nul.");
@@ -229,24 +280,41 @@ function resoudre(n, de, vers, via) {
   ];
 }
 
+/**
+ * Annule le retour visuel temporaire d’un déplacement invalide.
+ * @returns {void}
+ */
 function effacerRetourVisuel() {
   window.clearTimeout(minuterieRetourVisuel);
   minuterieRetourVisuel = null;
   tourInvalide = null;
 }
 
+/**
+ * Signale visuellement une tentative de déplacement invalide.
+ * @param {number} indexTour Indice de la tour où le dépôt est refusé.
+ * @returns {void}
+ */
 function afficherCoupInvalide(indexTour) {
   effacerRetourVisuel();
   tourInvalide = indexTour;
   rendre();
 
   minuterieRetourVisuel = window.setTimeout(() => {
-    tourInvalide = null;
-    minuterieRetourVisuel = null;
-    rendre();
+       tourInvalide = null;
+       minuterieRetourVisuel = null;
+       rendre();
   }, 900);
 }
 
+/**
+ * Anime un anneau qui monte, glisse au-dessus des tours et redescend.
+ * @param {HTMLDivElement} anneau Élément animé.
+ * @param {DOMRect} positionInitiale Position de l’anneau avant le déplacement.
+ * @param {DOMRect} tourDepart Position de la tour de départ.
+ * @param {DOMRect} tourArrivee Position de la tour d’arrivée.
+ * @returns {Animation | null} Animation créée, ou null si le mouvement est réduit ou indisponible.
+ */
 function animerDeplacement(anneau, positionInitiale, tourDepart, tourArrivee) {
   const positionFinale = anneau.getBoundingClientRect();
   const deplacementX = positionInitiale.left - positionFinale.left;
@@ -287,6 +355,13 @@ function animerDeplacement(anneau, positionInitiale, tourDepart, tourArrivee) {
   );
 }
 
+/**
+ * Attend un délai ou interrompt l’attente si le signal est annulé.
+ * @param {number} ms Durée de l’attente en millisecondes.
+ * @param {AbortSignal} signal Signal d’interruption de la démonstration.
+ * @returns {Promise<void>} Promesse résolue à l’expiration du délai de `ms` millisecondes.
+ * Rejetée avec une erreur `AbortError` si `signal` est annulé avant l’expiration.
+ */
 function attendreDelai(ms, signal) {
   return new Promise((resolve, reject) => {
     const terminer = () => {
@@ -313,6 +388,12 @@ function attendreDelai(ms, signal) {
   });
 }
 
+/**
+ * Attend la fin d’une animation tout en permettant son annulation.
+ * @param {Animation} animation Animation du déplacement à attendre.
+ * @param {AbortSignal} signal Signal d’interruption de la démonstration.
+ * @returns {Promise<void>} Promesse résolue à la fin de l’animation, ou rejetée si elle est annulée.
+ */
 async function attendreAnimation(animation, signal) {
   animationDemo = animation;
   const annuler = () => animation.cancel();
@@ -328,6 +409,14 @@ async function attendreAnimation(animation, signal) {
   }
 }
 
+/**
+ * Exécute les coups calculés, met à jour l’état et attend chaque animation.
+ * @param {number[][]} coups Liste des couples [de, vers] à rejouer.
+ * @param {AbortSignal} signal Signal permettant d’interrompre le rejeu.
+ * @returns {Promise<void>} Promesse résolue après le rejeu de tous les coups ou si `signal` est déjà annulé entre deux coups.
+ * Rejetée si un coup est illégal ou si l’annulation interrompt une attente.
+ * @throws {Error} Si la liste contient un déplacement illégal.
+ */
 async function rejouerCoups(coups, signal) {
   for (const [de, vers] of coups) {
     if (signal.aborted) {
@@ -364,6 +453,10 @@ async function rejouerCoups(coups, signal) {
   }
 }
 
+/**
+ * Annule toute démo en cours et vide l’état et les affichages de la partie.
+ * @returns {void}
+ */
 function reinitialiserJeu() {
   generationDemo += 1;
   if (controleurDemo) {
@@ -383,9 +476,9 @@ function reinitialiserJeu() {
   boutonDemo.disabled = false;
   obtenirPlateau().inert = false;
   noeudsAnneaux.forEach((anneau) => {
-    if (typeof anneau.getAnimations === "function") {
-      anneau.getAnimations().forEach((animation) => animation.cancel());
-    }
+       if (typeof anneau.getAnimations === "function") {
+         anneau.getAnimations().forEach((animation) => animation.cancel());
+       }
   });
 
   etat = [[], [], []];
@@ -401,7 +494,12 @@ function reinitialiserJeu() {
 
 boutonReset.addEventListener("click", reinitialiserJeu);
 
-document.addEventListener("click", (evenement) => {
+/**
+ * Traite la sélection d’un anneau et les déplacements manuels sur le plateau.
+ * @param {MouseEvent} evenement Événement de clic sur le document.
+ * @returns {void}
+ */
+function traiterClicPlateau(evenement) {
   if (demoEnCours) {
     return;
   }
@@ -464,9 +562,15 @@ document.addEventListener("click", (evenement) => {
     tourSelectionnee = indexTour;
     rendre();
   }
-});
+}
 
-boutonDemo.addEventListener("click", async () => {
+document.addEventListener("click", traiterClicPlateau);
+
+/**
+ * Démarre la démonstration automatique et réactive l’interface à la fin.
+ * @returns {Promise<void>} Promesse terminée lorsque la démonstration s’arrête.
+ */
+async function demarrerDemo() {
   if (demoEnCours || !champNbAnneaux.reportValidity()) {
     return;
   }
@@ -522,9 +626,13 @@ boutonDemo.addEventListener("click", async () => {
       rendre();
     }
   }
-});
+}
 
-boutonDemarrer.addEventListener("click", () => {
+/**
+ * Démarre ou redémarre une partie après validation du nombre d’anneaux.
+ * @returns {void}
+ */
+function demarrerPartie() {
   if (demoEnCours || !champNbAnneaux.reportValidity()) {
     return;
   }
@@ -544,6 +652,16 @@ boutonDemarrer.addEventListener("click", () => {
   effacerRetourVisuel();
   statutDemo.textContent = "";
   rendre();
-});
+}
 
+/**
+ * Associe les commandes de démarrage et de démonstration à leurs gestionnaires.
+ * @returns {void}
+ */
+function initialiserCommandes() {
+  boutonDemo.addEventListener("click", demarrerDemo);
+  boutonDemarrer.addEventListener("click", demarrerPartie);
+}
+
+initialiserCommandes();
 rendre();

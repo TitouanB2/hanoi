@@ -1,0 +1,221 @@
+:root {
+  color-scheme: light;
+  --page-background: #f3f5f8;
+  --page-text: #172033;
+  --card-background: #fff;
+  --card-shadow: rgb(23 32 51 / 10%);
+  --control-background: #fff;
+  --control-border: #cbd2df;
+  --button-background: #3157b7;
+  --button-border: #3157b7;
+  --button-text: #fff;
+  --muted-blue: #3157b7;
+  --victory-text: #16725e;
+  --base-color: #754c2e;
+  --tower-color: #a87545;
+  --ring-border: rgb(23 32 51 / 18%);
+}
+
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --page-background: #151a24;
+  --page-text: #edf1f8;
+  --card-background: #222a38;
+  --card-shadow: rgb(0 0 0 / 35%);
+  --control-background: #2d3748;
+  --control-border: #596579;
+  --button-background: #526fc2;
+  --button-border: #8299df;
+  --button-text: #fff;
+  --muted-blue: #a8bbff;
+  --victory-text: #67d8b8;
+  --base-color: #63472f;
+  --tower-color: #c18b5a;
+  --ring-border: rgb(255 255 255 / 28%);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  min-height: 100vh;
+  margin: 0;
+  padding: 2rem;
+  display: grid;
+  place-items: center;
+  background: var(--page-background);
+  color: var(--page-text);
+  font-family: Arial, sans-serif;
+}
+
+.jeu {
+  width: min(100%, 42rem);
+  padding: 2rem;
+  border-radius: 1rem;
+  background: var(--card-background);
+  box-shadow: 0 0.75rem 2rem var(--card-shadow);
+}
+
+h1 {
+  margin: 0 0 1.5rem;
+  text-align: center;
+}
+
+.commandes {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-bottom: 2rem;
+}
+
+input,
+button {
+  min-height: 2.5rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid var(--control-border);
+  border-radius: 0.4rem;
+  font: inherit;
+}
+
+input {
+  width: 5rem;
+  background: var(--control-background);
+  color: var(--page-text);
+}
+
+button {
+  border-color: var(--button-border);
+  background: var(--button-background);
+  color: var(--button-text);
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: wait;
+}
+
+.statut-demo {
+  min-height: 1.5em;
+  margin: 0 0 1rem;
+  color: var(--muted-blue);
+  text-align: center;
+}
+
+.compteur-coups {
+  margin: 0 0 1rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.message-victoire {
+  min-height: 1.5em;
+  margin: 0 0 1rem;
+  color: var(--victory-text);
+  font-size: 1.2rem;
+  font-weight: 700;
+  text-align: center;
+}
+
+.score {
+  min-height: 1.5em;
+  margin: 0 0 1rem;
+  color: var(--muted-blue);
+  font-weight: 700;
+  text-align: center;
+}
+
+.plateau {
+  min-height: 12rem;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: end;
+  gap: 1rem;
+  padding: 1rem 1rem 0;
+  border-bottom: 0.5rem solid var(--base-color);
+}
+
+.tour {
+  position: relative;
+  height: 10rem;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.tour::before {
+  position: absolute;
+  bottom: 0;
+  z-index: 0;
+  width: 0.5rem;
+  height: 9rem;
+  border-radius: 0.25rem 0.25rem 0 0;
+  background: var(--tower-color);
+  content: "";
+}
+
+.anneau {
+  position: relative;
+  z-index: 1;
+  height: 1rem;
+  flex: 0 0 1rem;
+  border: 1px solid var(--ring-border);
+  border-radius: 0.5rem;
+  transition:
+    transform 240ms cubic-bezier(0.2, 0.75, 0.3, 1),
+    box-shadow 240ms ease,
+    filter 240ms ease;
+}
+
+.anneau.selectionnable {
+  cursor: pointer;
+}
+
+.anneau.selectionne {
+  z-index: 2;
+  transform: translateY(-1.1rem);
+  box-shadow: 0 0 0.65rem 0.2rem rgb(45 212 191 / 72%);
+  filter: brightness(1.15) saturate(1.2);
+}
+
+.tour.coup-invalide {
+  animation: secousse 0.35s ease-in-out 2;
+}
+
+.tour.coup-invalide::before {
+  background: #c73737;
+}
+
+@keyframes secousse {
+  25% {
+    transform: translateX(-0.35rem);
+  }
+
+  75% {
+    transform: translateX(0.35rem);
+  }
+}
+
+@media (max-width: 30rem) {
+  body {
+    padding: 1rem;
+  }
+
+  .jeu {
+    padding: 1.25rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .anneau {
+    transition: none;
+  }
+
+  .tour.coup-invalide {
+    animation: none;
+  }
+}

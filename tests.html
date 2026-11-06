@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tests des Tours de Hanoï</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="jeu">
+    <h1>Tests des Tours de Hanoï</h1>
+    <div class="commandes">
+      <label for="nb-anneaux">Nombre d’anneaux</label>
+      <input id="nb-anneaux" name="nb-anneaux" type="number" min="1" max="8" value="3" required>
+      <button id="btn-demarrer" type="button">Démarrer</button>
+      <button id="btn-demo" type="button">Démo automatique</button>
+      <button id="btn-reset" type="button">Reset</button>
+      <button id="btn-theme" type="button">Mode sombre</button>
+    </div>
+    <p id="statut-demo" aria-live="polite"></p>
+    <p id="compteur-coups">Coups : <span id="nb-coups">0</span></p>
+    <p id="message-victoire" aria-live="polite"></p>
+    <p id="score" aria-live="polite"></p>
+    <div id="plateau" class="plateau" aria-label="Plateau des Tours de Hanoï">
+      <div class="tour" aria-label="Tour 1"></div>
+      <div class="tour" aria-label="Tour 2"></div>
+      <div class="tour" aria-label="Tour 3"></div>
+    </div>
+    <section aria-labelledby="titre-resultats">
+      <h2 id="titre-resultats">Résultats des tests</h2>
+      <ol id="resultats-tests" aria-live="polite"></ol>
+    </section>
+  </main>
+  <script src="script.js"></script>
+  <script src="tests.js"></script>
+</body>
+</html>

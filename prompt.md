@@ -289,3 +289,6 @@ La syntaxe de `script.js` a été vérifiée avec `node --check` après ces corr
 
 ## B. Demander ensuite au LLM une page tests.html qui charge script.js puis un fichier tests.js vérifiant dans la console resoudre (nombre de coups, validité de chaque coup, position finale) et deplacementValide. Un test échoue-t-il ? Qui a tort, le test ou le code ?
 
+J’ai créé [tests.html](./tests.html), qui charge `script.js` puis `tests.js`, et [tests.js](./tests.js), qui affiche les résultats dans la page et dans la console du navigateur. Les tests exécutent `resoudre` pour 0 à 8 anneaux et vérifient, pour chaque cas, le nombre minimal de coups (`2ⁿ − 1`), la légalité de chaque déplacement ainsi que la position finale. Ils vérifient aussi `deplacementValide` pour des déplacements permis et interdits, puis confirment qu’un coup interdit n’est pas comptabilisé.
+
+**Résultat :** 34 tests réussis, aucun échec. Aucun test ne met donc en évidence un désaccord entre le test et le code. Cela confirme le comportement vérifié pour ces cas, sans constituer une preuve exhaustive de toutes les situations possibles.
